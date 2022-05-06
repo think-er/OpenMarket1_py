@@ -99,13 +99,49 @@ def login_user():
         print("아이디(로그인 전용 아이디) 또는 비밀번호를 잘못 입력했습니다.\n입력하신 내용을 다시 확인해주세요.")
 
 def find_password():
-    df_user = pd.read_csv('csv/user.csv', index_col=0)
+    df_user = pd.read_csv('csv/user.csv')
+    df_user.set_index(df_user['USER_ID'], inplace=True)
 
 def find_id():
-    df_user = pd.read_csv('csv/user.csv', index_col=0)
+    df_user = pd.read_csv('csv/user.csv')
+    df_user.set_index(df_user['USER_ID'], inplace=True)
 
 def register_user():
-    df_user = pd.read_csv('csv/user.csv', index_col=0)
+    frame = Frame(win)
+    frame.config(bg="white")
+    frame.place(width=400, height=400)
+    df_user = pd.read_csv('csv/user.csv')
+    df_user.set_index(df_user['USER_ID'], inplace=True)
+
+    logo_img2 = Image.open('img/login/logo.png').resize((LOGO_WIDTH, LOGO_HEIGHT))
+    logo_img2 = ImageTk.PhotoImage(logo_img2)
+    logo_label2 = Label(frame)
+    logo_label2.config(image=logo_img, bg="white")
+    logo_label2.place(x=LOGO_X,y=LOGO_Y)
+
+    id_label2 = Label(frame)
+    id_label2.config(text="아이디", bg="white")
+
+    password_label2 = Label(frame)
+    password_label2.config(text="비밀번호")
+
+    password_reconfirm_label = Label(frame)
+    password_reconfirm_label.config(text="비밀번호 재확인")
+
+    name_label = Label(frame)
+    name_label.config(text="이름")
+
+    birth_label = Label(frame)
+    birth_label.config(text="생년월일")
+
+    gender_label = Label(frame)
+    gender_label.config(text="성별")
+
+    phone_label = Label(frame)
+    phone_label.config(text="휴대전화")
+
+
+
 
 
 
@@ -123,7 +159,7 @@ id_find_btn.config(text="아이디 찾기", relief="flat", bg="white")
 id_find_btn.place(x=OPTIONS_X+100,y=OPTIONS_Y)
 
 user_register_btn = Button(win)
-user_register_btn.config(text="회원 가입", relief="flat", bg="white")
+user_register_btn.config(text="회원 가입", relief="flat", bg="white", command=register_user)
 user_register_btn.place(x=OPTIONS_X+200,y=OPTIONS_Y)
 
 win.mainloop()
