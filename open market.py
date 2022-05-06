@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.font import Font
 from PIL import Image, ImageTk
+import pandas as pd
 
 # 왜 GUI에 클래스가 필요한걸까?
 
@@ -20,7 +21,7 @@ LOGIN_Y = 230
 
 # found id/password/register button
 OPTIONS_X = 70
-OPTIONS_Y = 360
+OPTIONS_Y = 350
 
 win = Tk()
 win.title("Login")
@@ -41,7 +42,7 @@ title_font = Font(
 )
 
 title_label = Label(win)
-title_label.config(text="Open Market", font=title_font, bg="white")
+title_label.config(text="Open Market", font=title_font, bg="white", foreground='orange')
 title_label.place(x=LOGO_X-20,y=LOGO_Y+130)
 
 input_login_font = Font(
@@ -68,10 +69,50 @@ password_entry = Entry(win)
 password_entry.config(show="*", font=input_login_font, relief="groove")
 password_entry.place(x=LOGIN_X+30,y=LOGIN_Y+30,width=LOIGN_ENTRY_WIDTH,height=LOIGN_ENTRY_HEIGHT)
 
+def login_user():
+    df_user = pd.read_csv('csv/user.csv')
+    df_user.set_index(df_user['USER_ID'], inplace=True)
+    id = id_entry.get()
+    pw = password_entry.get()
+
+    # 아이디, 비밀번호 입력 확인
+    if id == "":
+        print("아이디를 입력해 주세요.")
+        return 0
+    else:
+        if pw == "":
+            print("비밀번호를 입력해 주세요.")
+            return 0
+
+    if id in df_user.index:
+        id_check = True
+        if df_user.loc[id, 'USER_PW'] == pw:
+            pw_check = True
+        else:
+            pw_check = False
+    else:
+        id_check = False
+
+    if id_check == True and pw_check == True:
+        print("로그인 성공")
+    else:
+        print("아이디(로그인 전용 아이디) 또는 비밀번호를 잘못 입력했습니다.\n입력하신 내용을 다시 확인해주세요.")
+
+def find_password():
+    df_user = pd.read_csv('csv/user.csv', index_col=0)
+
+def find_id():
+    df_user = pd.read_csv('csv/user.csv', index_col=0)
+
+def register_user():
+    df_user = pd.read_csv('csv/user.csv', index_col=0)
+
+
+
+
 login_btn = Button(win)
-login_btn.config(text="로그인", relief="flat", bg="white")
-# login_btn.config(padx=10,pady=10)
-login_btn.place(x=LOGIN_X+85,y=LOGIN_Y+90)
+login_btn.config(text="로그인", relief="flat", bg="orange", foreground='white', command=login_user)
+login_btn.place(x=LOGIN_X+30,y=LOGIN_Y+70,width=150,height=30)
 
 password_find_btn = Button(win)
 password_find_btn.config(text="비밀번호 찾기", relief="flat", bg="white")
