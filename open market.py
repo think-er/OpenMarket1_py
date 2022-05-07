@@ -68,7 +68,9 @@ id_img = ImageTk.PhotoImage(id_img)
 id_label = Label(win)
 id_label.config(image=id_img)
 id_label.place(x=LOGIN_X,y=LOGIN_Y)
-id_entry = Entry(win)
+
+id_var = StringVar(win)
+id_entry = Entry(win, textvariable=id_var)
 id_entry.config(relief="groove")
 id_entry.place(x=LOGIN_X+30,y=LOGIN_Y,width=LOGIN_ENTRY_WIDTH,height=LOGIN_ENTRY_HEIGHT)
 
@@ -126,43 +128,88 @@ def register_user():
     df_user = pd.read_csv('csv/user.csv')
     df_user.set_index(df_user['USER_ID'], inplace=True)
 
+    id_var = StringVar(frame)
+
+    def id_var_length(*args):
+        s = id_var.get()
+        if len(s) > 20:
+            id_var.set(s[:20])
+
+    id_var.trace_variable("w", id_var_length)
+
     id_label = Label(frame)
     id_label.config(text="아이디")
     id_label.place(x=REGISTER_X,y=REGISTER_Y)
 
     id_entry = Entry(frame)
-    id_entry.config(relief="groove")
+    id_entry.config(relief="groove", textvariable=id_var)
     id_entry.place(x=REGISTER_X,y=REGISTER_Y+20,width=REGISTER_ENTRY_WIDTH,height=REGISTER_ENTRY_HEIGHT)
+
+    password_var = StringVar(frame)
+
+    def password_var_length(*args):
+        s = password_var.get()
+        if len(s) > 20:
+            password_var.set(s[:20])
+            
+    password_var.trace_variable("w", password_var_length)
 
     password_label2 = Label(frame)
     password_label2.config(text="비밀번호")
     password_label2.place(x=REGISTER_X,y=REGISTER_Y+70)
 
-    password_entry = Entry(frame)
+    password_entry = Entry(frame, textvariable=password_var)
     password_entry.config(show='*',relief="groove")
     password_entry.place(x=REGISTER_X,y=REGISTER_Y+90,width=REGISTER_ENTRY_WIDTH,height=REGISTER_ENTRY_HEIGHT)
+
+    password_reconfirm_var = StringVar(frame)
+
+    def password_reconfirm_var_length(*args):
+        s = password_reconfirm_var.get()
+        if len(s) > 20:
+            password_reconfirm_var.set(s[:20])
+            
+    password_reconfirm_var.trace_variable("w", password_reconfirm_var_length)
 
     password_reconfirm_label = Label(frame)
     password_reconfirm_label.config(text="비밀번호 재확인")
     password_reconfirm_label.place(x=REGISTER_X,y=REGISTER_Y+140)
 
-    password_reconfirm_label = Entry(frame)
-    password_reconfirm_label.config(show='*',relief="groove")
-    password_reconfirm_label.place(x=REGISTER_X,y=REGISTER_Y+160,width=REGISTER_ENTRY_WIDTH,height=REGISTER_ENTRY_HEIGHT)
+    password_reconfirm_entry = Entry(frame, textvariable=password_reconfirm_var)
+    password_reconfirm_entry.config(show='*',relief="groove")
+    password_reconfirm_entry.place(x=REGISTER_X,y=REGISTER_Y+160,width=REGISTER_ENTRY_WIDTH,height=REGISTER_ENTRY_HEIGHT)
+
+    name_var = StringVar(frame)
+
+    def name_var_length(*args):
+        s = name_var.get()
+        if len(s) > 40:
+            name_var.set(s[:40])
+            
+    name_var.trace_variable("w", name_var_length)
 
     name_label = Label(frame)
     name_label.config(text="이름")
     name_label.place(x=REGISTER_X,y=REGISTER_Y+210)
 
-    name_entry = Entry(frame)
+    name_entry = Entry(frame, textvariable=name_var)
     name_entry.config(relief="groove")
     name_entry.place(x=REGISTER_X,y=REGISTER_Y+230,width=REGISTER_ENTRY_WIDTH,height=REGISTER_ENTRY_HEIGHT)
+
+    birth_year_var = StringVar(frame)
+
+    def birth_year_var_length(*args):
+        s = birth_year_var.get()
+        if len(s) > 4:
+            birth_year_var.set(s[:4])
+            
+    birth_year_var.trace_variable("w", birth_year_var_length)
 
     birth_label = Label(frame)
     birth_label.config(text="생년월일")
     birth_label.place(x=REGISTER_X,y=REGISTER_Y+280)
 
-    birth_year_entry = Entry(frame)
+    birth_year_entry = Entry(frame, textvariable=birth_year_var)
     birth_year_entry.config(relief="groove")
     birth_year_entry.place(x=REGISTER_X,y=REGISTER_Y+300,width=REGISTER_BIRTH_WIDTH,height=REGISTER_ENTRY_HEIGHT)
 
@@ -171,7 +218,16 @@ def register_user():
     birth_month_combo.current(0)
     birth_month_combo.place(x=REGISTER_X+68,y=REGISTER_Y+300,width=REGISTER_BIRTH_WIDTH,height=REGISTER_ENTRY_HEIGHT)
 
-    birth_day_entry = Entry(frame)
+    birth_day_var = StringVar(frame)
+
+    def birth_day_var_length(*args):
+        s = birth_day_var.get()
+        if len(s) > 2:
+            birth_day_var.set(s[:2])
+            
+    birth_day_var.trace_variable("w", birth_day_var_length)
+
+    birth_day_entry = Entry(frame, textvariable=birth_day_var)
     birth_day_entry.config(relief="groove")  
     birth_day_entry.place(x=REGISTER_X+136,y=REGISTER_Y+300,width=REGISTER_BIRTH_WIDTH,height=REGISTER_ENTRY_HEIGHT)
 
@@ -183,17 +239,36 @@ def register_user():
     gender_combo.current(0)
     gender_combo.place(x=REGISTER_X,y=REGISTER_Y+370,width=REGISTER_ENTRY_WIDTH,height=REGISTER_GENDER_HEIGHT)
 
+    phone_var = StringVar(frame)
+
+    def phone_var_length(*args):
+        s = phone_var.get()
+        if len(s) > 13:
+            phone_var.set(s[:13])
+            
+    phone_var.trace_variable("w", phone_var_length)
+
     phone_label = Label(frame)
     phone_label.config(text="휴대전화")
     phone_label.place(x=100,y=REGISTER_Y+420)
-    phone_entry = Entry(frame)
+    phone_entry = Entry(frame, textvariable=phone_var)
     phone_entry.config(relief="groove")
     phone_entry.place(x=REGISTER_X,y=REGISTER_Y+440,width=REGISTER_PHONE_WIDTH,height=REGISTER_ENTRY_HEIGHT)
     phone_btn = Button(frame)
     phone_btn.config(text="인증번호", relief="flat", bg="orange", foreground="white")
     phone_btn.place(x=REGISTER_PHONE_CHECK_X,y=REGISTER_Y+440,width=REGISTER_PHONE_CHECK_WIDTH,height=REGISTER_ENTRY_HEIGHT)
-    phone_check_entry = Entry(frame)
-    phone_check_entry.config(relief="groove")
+
+    phone_check_var = StringVar(frame)
+
+    def phone_check_var_length(*args):
+        s = phone_check_var.get()
+        if len(s) > 16:
+            phone_check_var.set(s[:4])
+            
+    phone_check_var.trace_variable("w", phone_check_var_length)
+
+    phone_check_entry = Entry(frame, textvariable=phone_check_var)
+    phone_check_entry.config(relief="groove", state="disabled")
     phone_check_entry.place(x=REGISTER_X,y=REGISTER_Y+470,width=REGISTER_ENTRY_WIDTH,height=REGISTER_ENTRY_HEIGHT)
 
     register_btn = Button(frame)
